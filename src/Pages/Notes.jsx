@@ -2,27 +2,36 @@ import { useState } from "react";
 
 export default function Notes() {
   const [notes, setNotes] = useState([]);
+  const [inputNote, setInputNote] = useState("");
 
-  const addNoteHandler = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const value = e.target[0].value.trim();
 
-    if (value == "") return;
-    setNotes((prev) => [...prev, value]);
-    e.target[0].value = "";
+    if (inputNote.trim() !== "") {
+      const newNote = {
+        id: Date.now(),
+        text: inputNote,
+      };
+
+      setNotes([...notes, newNote]);
+    }
+
+    setInputNote("");
   };
 
-  function deleteHandler(indexToDelete) {
-    setNotes((prevNotes) =>
-      prevNotes.filter((_, index) => index !== indexToDelete)
-    );
+  function handleInputNote(e) {
+    setInputNote(e.target.value);
+  }
+
+  function handleDelete(id) {
+    setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id));
   }
 
   return (
     <div className="p-10">
       <h1 className=" text-2xl font-bold text-center mb-5">Notes</h1>
       <form
-        onSubmit={addNoteHandler}
+        onSubmit={handleSubmit}
         className="flex items-center justify-center mb-5"
       >
         <label className="mr-4 py-1">
@@ -30,6 +39,8 @@ export default function Notes() {
             type="text"
             placeholder="Add a note"
             className="border-1 rounded-sm py-1 px-2"
+            value={inputNote}
+            onChange={handleInputNote}
           />
         </label>
 
@@ -40,15 +51,15 @@ export default function Notes() {
 
       <div className="w-4/5 mx-auto">
         <ul>
-          {notes.map((value, index) => {
+          {notes.map((note) => {
             return (
               <li
-                key={index}
+                key={note.id}
                 className="bg-slate-100 px-2 py-1 flex justify-between mb-2"
               >
-                <span>{value}</span>
+                <span>{note.text}</span>
                 <button
-                  onClick={() => deleteHandler(index)}
+                  onClick={() => handleDelete(note.id)}
                   className="bg-red-400 text-white px-2 py-0.5 rounded-md cursor-pointer"
                 >
                   Delete

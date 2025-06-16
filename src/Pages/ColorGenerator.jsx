@@ -15,6 +15,30 @@ export default function ColorGenerator() {
   const [color, setColor] = useState("#000000");
   const [opacity, setOpacity] = useState("1");
 
+  const handleColorChange = (e) => {
+    setColor(e.target.value);
+  };
+  const handleOpacityChange = (e) => {
+    const opacityValue = Number(e.target.value);
+    setOpacity(opacityValue);
+  };
+
+  const getOpacityPercentage = () => {
+    const opacityPercentage = Math.round(opacity * 100);
+    return `${opacityPercentage}`;
+  };
+
+  const getCssCode = () => {
+    const CSSCode = `
+    background-color: ${color};
+    opacity: ${opacity}
+    `;
+    return CSSCode.trim();
+  };
+
+  const r = hexToRgb(color).r;
+  const g = hexToRgb(color).g;
+  const b = hexToRgb(color).b;
   return (
     <div className="p-10">
       <h1 className="text-center font-bold text-2xl">Color Generator</h1>
@@ -22,27 +46,31 @@ export default function ColorGenerator() {
         <input
           type="color"
           className="border-1 rounded-sm"
-          onChange={(e) => setColor(e.target.value)}
+          onChange={handleColorChange}
+          value={color}
         />
         <input
           type="range"
           max="1"
           min="0"
-          defaultValue="1"
           step="0.1"
-          onChange={(e) => setOpacity(e.target.value)}
+          onChange={handleOpacityChange}
+          value={opacity}
           className="w-60"
         />
-        <div
-          className="w-40 h-40 mx-auto"
-          style={{ background: `${color}`, opacity: `${opacity}` }}
-        ></div>
+        {color && (
+          <div
+            className="w-40 h-40 mx-auto"
+            style={{ background: color, opacity: opacity }}
+          ></div>
+        )}
         <span>Hex: {color}</span>
-        <span>Opacity: {opacity * 100}%</span>
         <span>
           RGB: rgb
-          {`(${hexToRgb(color).r}, ${hexToRgb(color).g}, ${hexToRgb(color).b})`}
+          {`(${r}, ${g}, ${b})`}
         </span>
+        <span>Opacity: {getOpacityPercentage()} %</span>
+        <span>{getCssCode()}</span>
       </div>
     </div>
   );
