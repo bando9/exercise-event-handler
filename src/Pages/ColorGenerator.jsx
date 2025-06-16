@@ -18,7 +18,7 @@ export default function ColorGenerator() {
   return (
     <div className="p-10">
       <h1 className="text-center font-bold text-2xl">Color Generator</h1>
-      <div className="flex flex-col items-center gap-2 mt-4">
+      <div className="flex flex-col items-center gap-3 mt-4">
         <input
           type="color"
           className="border-1 rounded-sm"
@@ -31,6 +31,7 @@ export default function ColorGenerator() {
           defaultValue="1"
           step="0.1"
           onChange={(e) => setOpacity(e.target.value)}
+          className="w-60"
         />
         <div
           className="w-40 h-40 mx-auto"

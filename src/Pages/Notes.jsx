@@ -5,14 +5,17 @@ export default function Notes() {
 
   const addNoteHandler = (e) => {
     e.preventDefault();
-    const value = e.target[0].value;
+    const value = e.target[0].value.trim();
 
+    if (value == "") return;
     setNotes((prev) => [...prev, value]);
     e.target[0].value = "";
   };
 
-  function deleteHandler() {
-    console.log("dihapus");
+  function deleteHandler(indexToDelete) {
+    setNotes((prevNotes) =>
+      prevNotes.filter((_, index) => index !== indexToDelete)
+    );
   }
 
   return (
@@ -35,7 +38,7 @@ export default function Notes() {
         </button>
       </form>
 
-      <div>
+      <div className="w-4/5 mx-auto">
         <ul>
           {notes.map((value, index) => {
             return (
@@ -45,7 +48,7 @@ export default function Notes() {
               >
                 <span>{value}</span>
                 <button
-                  onClick={deleteHandler}
+                  onClick={() => deleteHandler(index)}
                   className="bg-red-400 text-white px-2 py-0.5 rounded-md cursor-pointer"
                 >
                   Delete
